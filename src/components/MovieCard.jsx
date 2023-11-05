@@ -35,6 +35,7 @@ const MovieCard = ({
   data = {},
   onClickDetail = () => null,
   onClickCart = () => null,
+  isCartButtonDisabled = false,
 }) => {
   return (
     <Card maxW="xs" className="movie-card" onClick={onClickDetail}>
@@ -60,6 +61,7 @@ const MovieCard = ({
           bg="#b84509"
           color="#ffffff"
           _hover={{ opacity: 0.8 }}
+          isDisabled={isCartButtonDisabled}
           onClick={(e) => {
             e.stopPropagation();
             onClickCart(data);

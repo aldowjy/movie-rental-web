@@ -1,10 +1,11 @@
 #root {
   background-color: #e6e2df;
+  padding-bottom: 2em;
 }
 
 .movie-card {
   transition: transform 0.5s;
-  cursor: "pointer";
+  cursor: pointer;
 }
 .movie-card:hover {
   transform: scale(1.1);

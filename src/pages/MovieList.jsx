@@ -15,13 +15,18 @@ import { useDebounce } from "use-debounce";
 import MovieCard from "../components/MovieCard";
 import { useNavigate } from "react-router-dom";
 import useMovieFetch from "../hooks/useMovieFetch";
+import useLocalStorageState from "use-local-storage-state";
 
 const MovieList = () => {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchDebounceValue] = useDebounce(searchKeyword, 2000);
   const { fetchData, fetchMovies, loader } = useMovieFetch();
-
+  const [movieCart, setMovieCart] = useLocalStorageState("movieCart", {
+    episode_id: 1,
+    title: "",
+    price: 0,
+  });
   const handleSearchClick = () => {
     navigate({
       pathname: "/",
@@ -32,6 +37,20 @@ const MovieList = () => {
   const handleDetailClick = (data) => {
     navigate(`/detail/${data.title}`, { state: data.title });
   };
+
+  const handleCartClick = (movie) => {
+    setMovieCart((prevMovieCart) => ({
+      ...prevMovieCart,
+      [movie.episode_id]: {
+        episode_id: movie.episode_id,
+        title: movie.title,
+        price: movie.price,
+      },
+    }));
+  };
+
+  const isInCart = (episodeId) =>
+    Object.keys(movieCart || {}).includes(episodeId.toString());
 
   useEffect(() => {
     fetchMovies({
@@ -76,16 +95,15 @@ const MovieList = () => {
         </HStack>
       ) : (
         <Wrap mt={8} spacing={8} align="center" justify="center">
-          {fetchData?.map((data, i) => {
-            return (
-              <MovieCard
-                key={i}
-                data={data}
-                onClickDetail={() => handleDetailClick(data)}
-                onClickCart={(data) => console.log(data)}
-              />
-            );
-          })}
+          {fetchData?.map((data, i) => (
+            <MovieCard
+              key={i}
+              data={data}
+              onClickDetail={() => handleDetailClick(data)}
+              onClickCart={(data) => handleCartClick(data)}
+              isCartButtonDisabled={isInCart(data.episode_id)}
+            />
+          ))}
         </Wrap>
       )}
     </>
