@@ -5,6 +5,10 @@ import { MdShoppingCart } from "react-icons/md";
 function Header() {
   const navigate = useNavigate();
 
+  const handleCartClick = () => {
+    navigate("/cart");
+  };
+
   return (
     <Box bg="#191212" px={8} mb={8}>
       <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
@@ -18,7 +22,7 @@ function Header() {
           bg="#b84509"
           color="#ffffff"
           _hover={{ opacity: 0.8 }}
-          onClick={() => navigate("/cart")}
+          onClick={handleCartClick}
         >
           Cart
         </Button>

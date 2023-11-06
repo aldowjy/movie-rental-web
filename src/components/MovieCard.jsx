@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -14,34 +13,24 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { MdShoppingCart } from "react-icons/md";
-import {
-  a_new_hope,
-  attack_of_the_clones,
-  return_of_the_jedi,
-  revenge_of_the_sith,
-  the_empire_strikes_back,
-  the_phantom_menace,
-} from "../assets/images";
-
-const MOVIE_IMAGE = {
-  1: <Image src={the_phantom_menace} alt="eps-1" width={150} />,
-  2: <Image src={attack_of_the_clones} alt="eps-2" width={150} />,
-  3: <Image src={revenge_of_the_sith} alt="eps-3" width={150} />,
-  4: <Image src={a_new_hope} alt="eps-4" width={150} />,
-  5: <Image src={the_empire_strikes_back} alt="eps-5" width={150} />,
-  6: <Image src={return_of_the_jedi} alt="eps-6" width={150} />,
-};
+import { getImageURL } from "../utils";
 
 const MovieCard = ({
   data = {},
-  onClickDetail = () => null,
-  onClickCart = () => null,
+  onClickToDetail = () => null,
+  onClickAddCart = () => null,
   isCartButtonDisabled = false,
 }) => {
   return (
-    <Card maxW="xs" className="movie-card" onClick={onClickDetail}>
+    <Card maxW="xs" className="movie-card" onClick={onClickToDetail}>
       <CardBody>
-        <Center>{MOVIE_IMAGE[data?.episode_id]}</Center>
+        <Center>
+          <Image
+            src={getImageURL(data?.title)}
+            alt={data?.episode_id}
+            width={150}
+          />
+        </Center>
         <Stack mt="6" spacing="3">
           <Heading size="md" align="left">
             {data?.title}
@@ -65,7 +54,7 @@ const MovieCard = ({
           isDisabled={isCartButtonDisabled}
           onClick={(e) => {
             e.stopPropagation();
-            onClickCart(data);
+            onClickAddCart(data);
           }}
         />
       </CardFooter>
