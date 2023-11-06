@@ -35,6 +35,13 @@ function MovieCart() {
     ? JSON.parse(localStorage.movieCart)
     : {};
 
+  const handlerDeleteClick = (episode_id) => {
+    let updateData = { ...getMovies };
+    delete updateData[episode_id.toString()];
+    updateData = JSON.stringify(updateData);
+    localStorage.setItem("movieCart", updateData);
+    location.reload();
+  };
   return (
     <>
       {Object.keys(getMovies).map((data, i) => (
@@ -61,13 +68,16 @@ function MovieCart() {
               </Text>
               <IconButton
                 variant="ghost"
-                aria-label="side-menu"
+                aria-label="delete-cart"
                 size="lg"
                 bg="#b84509"
                 color="#ffffff"
                 _hover={{ opacity: 0.8 }}
                 ml={4}
                 icon={<MdDelete />}
+                onClick={() =>
+                  handlerDeleteClick(getMovies[Number(data)].episode_id)
+                }
               />
             </Flex>
           </CardBody>

@@ -7,6 +7,7 @@ import {
   Center,
   Divider,
   Heading,
+  IconButton,
   Image,
   Spacer,
   Stack,
@@ -56,19 +57,17 @@ const MovieCard = ({
           {`Rp. ${data?.price?.toLocaleString() || 0}`}
         </Text>
         <Spacer />
-        <Button
-          leftIcon={<MdShoppingCart />}
+        <IconButton
           bg="#b84509"
           color="#ffffff"
           _hover={{ opacity: 0.8 }}
+          icon={<MdShoppingCart />}
           isDisabled={isCartButtonDisabled}
           onClick={(e) => {
             e.stopPropagation();
             onClickCart(data);
           }}
-        >
-          Add to cart
-        </Button>
+        />
       </CardFooter>
     </Card>
   );
