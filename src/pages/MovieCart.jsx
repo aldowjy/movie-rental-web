@@ -64,7 +64,7 @@ function MovieCart() {
                 fontSize="xl"
                 fontWeight="bold"
               >
-                {`Rp. ${getMovies[Number(data)].price?.toLocaleString() || 0}`}
+                {`$ ${getMovies[Number(data)].price?.toLocaleString() || 0}`}
               </Text>
               <IconButton
                 variant="ghost"
@@ -99,7 +99,7 @@ function MovieCart() {
         </Button>
         <Spacer />
         <Text align="left" color="#b84509" fontSize="xl" fontWeight="bold">
-          {`Total Price: Rp. ${totalPrice(
+          {`Total Price: $ ${totalPrice(
             Object.values(getMovies)
           ).toLocaleString()}`}
         </Text>

@@ -14,7 +14,7 @@ function useMovieFetch() {
       });
 
       const movieData = await data.results?.map((object) => {
-        return { ...object, price: 20000 };
+        return { ...object, price: 10 };
       });
 
       setFetchData(movieData);
@@ -34,7 +34,7 @@ function useMovieFetch() {
       });
 
       const movieData = await data.results?.map((object) => {
-        return { ...object, price: 20000 };
+        return { ...object, price: 10 };
       });
 
       setFetchData(movieData[0]);

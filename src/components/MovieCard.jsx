@@ -54,7 +54,7 @@ const MovieCard = ({
       <Divider />
       <CardFooter alignItems="center">
         <Text align="left" color="#b84509" fontSize="xl" fontWeight="bold">
-          {`Rp. ${data?.price?.toLocaleString() || 0}`}
+          {`$ ${data?.price?.toLocaleString() || 0}`}
         </Text>
         <Spacer />
         <IconButton

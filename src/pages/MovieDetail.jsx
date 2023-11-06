@@ -143,7 +143,7 @@ const MovieDetail = () => {
                 fontSize="xl"
                 fontWeight="bold"
               >
-                {`Rp. ${fetchData?.price?.toLocaleString() || 0}`}
+                {`$ ${fetchData?.price?.toLocaleString() || 0}`}
               </Text>
               <Spacer />
               <Button
