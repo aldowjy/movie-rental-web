@@ -6,3 +6,13 @@ export const getImageURL = (title) => {
   return new URL(`../assets/images/${titleTransform}.jpg`, import.meta.url)
     .href;
 };
+
+export const parseUrlQuery = (urlQuery) => {
+  const searchParams = new URLSearchParams(urlQuery);
+  return Object.fromEntries(searchParams);
+};
+
+export const stringifyUrlQuery = (objQuery) => {
+  const searchParams = new URLSearchParams(objQuery);
+  return searchParams.toString();
+};

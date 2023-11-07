@@ -2,43 +2,49 @@ import { useEffect, useState } from "react";
 import {
   Button,
   Center,
+  IconButton,
   Input,
   Stack,
   Wrap,
-  Box,
-  SkeletonCircle,
-  SkeletonText,
-  HStack,
 } from "@chakra-ui/react";
-import { MdSearch } from "react-icons/md";
-import { useDebounce } from "use-debounce";
+import { MdDelete, MdSearch } from "react-icons/md";
 import MovieCard from "../components/MovieCard";
 import { useNavigate } from "react-router-dom";
 import useMovieFetch from "../hooks/useMovieFetch";
 import useLocalStorageState from "use-local-storage-state";
+import Spinner from "../components/Spinner";
+import useGetSearchParams from "../hooks/useGetSearchParams";
+import { stringifyUrlQuery } from "../utils";
 
 const MovieList = () => {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchDebounceValue] = useDebounce(searchKeyword, 2000);
   const { fetchData, fetchMovies, loader } = useMovieFetch();
   const [movieCart, setMovieCart] = useLocalStorageState("movieCart", {
     episode_id: 1,
     title: "",
     price: 0,
   });
+  const { search = "" } = useGetSearchParams();
+  const query = { search };
+
   const handleSearchClick = () => {
+    const paramsQuery = { ...query, search: searchKeyword };
+
+    for (const key in paramsQuery) {
+      if (!paramsQuery[key]) delete paramsQuery[key];
+    }
+
     navigate({
-      pathname: "/",
-      search: `?search=${searchDebounceValue}`,
+      search: stringifyUrlQuery(paramsQuery),
     });
   };
 
-  const handleDetailClick = (data) => {
-    navigate(`/detail/${data.title}`, { state: data.title });
+  const handleToDetailClick = (data) => {
+    navigate(`/detail/${data.title}`);
   };
 
-  const handleCartClick = (movie) => {
+  const handleAddCartClick = (movie) => {
     setMovieCart((prevMovieCart) => ({
       ...prevMovieCart,
       [movie.episode_id]: {
@@ -49,14 +55,29 @@ const MovieList = () => {
     }));
   };
 
+  const handleDeleteClick = () => {
+    setSearchKeyword("");
+
+    const paramsQuery = {
+      ...query,
+      search: "",
+    };
+
+    for (const key in paramsQuery) {
+      if (!paramsQuery[key]) delete paramsQuery[key];
+    }
+
+    navigate({
+      search: stringifyUrlQuery(paramsQuery),
+    });
+  };
+
   const isInCart = (episodeId) =>
     Object.keys(movieCart || {}).includes(episodeId.toString());
 
   useEffect(() => {
-    fetchMovies({
-      params: { search: searchDebounceValue },
-    });
-  }, [fetchMovies, searchDebounceValue]);
+    fetchMovies({ params: { search } });
+  }, [fetchMovies, search]);
 
   return (
     <>
@@ -67,7 +88,17 @@ const MovieList = () => {
             size="lg"
             onChange={(e) => setSearchKeyword(e.target.value)}
             value={searchKeyword}
+            defaultValue={search}
             bg="white"
+          />
+          <IconButton
+            bg="#b84509"
+            size="lg"
+            color="#ffffff"
+            _hover={{ opacity: 0.8 }}
+            icon={<MdDelete />}
+            isDisabled={!searchKeyword}
+            onClick={handleDeleteClick}
           />
           <Button
             leftIcon={<MdSearch />}
@@ -83,24 +114,15 @@ const MovieList = () => {
         </Stack>
       </Center>
       {loader ? (
-        <HStack>
-          <Box padding="6" boxShadow="lg" bg="white" mt={8} width={200}>
-            <SkeletonCircle size="10" />
-            <SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="2" />
-          </Box>
-          <Box padding="6" boxShadow="lg" bg="white" mt={8} width={200}>
-            <SkeletonCircle size="10" />
-            <SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="2" />
-          </Box>
-        </HStack>
+        <Spinner />
       ) : (
         <Wrap mt={8} spacing={8} align="center" justify="center">
           {fetchData?.map((data, i) => (
             <MovieCard
               key={i}
               data={data}
-              onClickDetail={() => handleDetailClick(data)}
-              onClickCart={(data) => handleCartClick(data)}
+              onClickToDetail={() => handleToDetailClick(data)}
+              onClickAddCart={(data) => handleAddCartClick(data)}
               isCartButtonDisabled={isInCart(data.episode_id)}
             />
           ))}
