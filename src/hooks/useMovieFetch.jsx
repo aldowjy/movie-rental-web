@@ -25,13 +25,13 @@ function useMovieFetch() {
     }
   }, []);
 
-  const fetchMovieDetail = useCallback(async ({ params }) => {
+  const fetchMovieDetail = useCallback(async (movieName) => {
     setLoader(true);
 
     try {
-      const { data } = await axios.get("https://swapi.dev/api/films", {
-        params,
-      });
+      const { data } = await axios.get(
+        `https://swapi.dev/api/films?search=${movieName}`
+      );
 
       const movieData = await data.results?.map((object) => {
         return { ...object, price: 10 };
