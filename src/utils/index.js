@@ -16,3 +16,6 @@ export const stringifyUrlQuery = (objQuery) => {
   const searchParams = new URLSearchParams(objQuery);
   return searchParams.toString();
 };
+
+export const getCart = () =>
+  JSON.parse(localStorage.getItem("movieCart") || "{}");
