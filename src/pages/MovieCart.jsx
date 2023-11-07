@@ -10,27 +10,13 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { MdDelete } from "react-icons/md";
-import {
-  a_new_hope,
-  attack_of_the_clones,
-  return_of_the_jedi,
-  revenge_of_the_sith,
-  the_empire_strikes_back,
-  the_phantom_menace,
-} from "../assets/images";
-import { totalPrice } from "../utils";
+import { MdArrowBack, MdDelete } from "react-icons/md";
+import { getImageURL, totalPrice } from "../utils";
+import { useNavigate } from "react-router-dom";
 
-const MOVIE_IMAGE = {
-  1: <Image src={the_phantom_menace} alt="eps-1" width={150} />,
-  2: <Image src={attack_of_the_clones} alt="eps-2" width={150} />,
-  3: <Image src={revenge_of_the_sith} alt="eps-3" width={150} />,
-  4: <Image src={a_new_hope} alt="eps-4" width={150} />,
-  5: <Image src={the_empire_strikes_back} alt="eps-5" width={150} />,
-  6: <Image src={return_of_the_jedi} alt="eps-6" width={150} />,
-};
+const MovieCart = () => {
+  const navigate = useNavigate();
 
-function MovieCart() {
   const getMovies = localStorage.movieCart
     ? JSON.parse(localStorage.movieCart)
     : {};
@@ -42,8 +28,22 @@ function MovieCart() {
     localStorage.setItem("movieCart", updateData);
     location.reload();
   };
+
+  const handleBackClick = () => navigate(-1);
+
   return (
     <>
+      <Button
+        leftIcon={<MdArrowBack />}
+        bg="#b84509"
+        color="#ffffff"
+        _hover={{ opacity: 0.8 }}
+        onClick={handleBackClick}
+        mb={8}
+      >
+        Back
+      </Button>
+
       {Object.keys(getMovies).map((data, i) => (
         <Card
           key={i}
@@ -53,7 +53,13 @@ function MovieCart() {
           my={4}
           align="center"
         >
-          <Center>{MOVIE_IMAGE[getMovies[Number(data)].episode_id]}</Center>
+          <Center>
+            <Image
+              src={getImageURL(getMovies[Number(data)].title)}
+              alt={getMovies[Number(data)].episode_id}
+              width={150}
+            />
+          </Center>
           <CardBody textAlign="left">
             <Flex align="center">
               <Heading size="md">{getMovies[Number(data)].title}</Heading>
@@ -106,6 +112,6 @@ function MovieCart() {
       </Flex>
     </>
   );
-}
+};
 
 export default MovieCart;
